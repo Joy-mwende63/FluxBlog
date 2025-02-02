@@ -1,70 +1,161 @@
-# Getting Started with Create React App
+# FluxBlog
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+FluxBlog is a modern blogging platform where users can create, like, and comment on blog posts. The platform features user authentication, post creation, comment systems, and profile management. Built using **Flask** (for the backend) and **React** (for the frontend), FluxBlog provides an engaging user experience with a responsive design.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- **User Authentication**: Users can sign up, log in, and manage their profile.
+- **Create Posts**: Logged-in users can create posts with content and images.
+- **Like Posts**: Users can like posts.
+- **Comment System**: Users can comment on posts.
+- **Responsive Design**: The platform is mobile-friendly.
 
-### `npm start`
+## Tech Stack
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **Frontend**: React.js, Axios, React Router
+- **Backend**: Flask, Flask-SQLAlchemy, Flask-CORS, Flask-Migrate, Flask-Bcrypt
+- **Database**: SQLite (development)
+- **Authentication**: JWT (JSON Web Tokens)
+- **Styling**: Styled-components
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Installation
 
-### `npm test`
+### 1. Clone the repository
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```bash
+git clone https://github.com/your-username/fluxblog.git
+cd fluxblog
 
-### `npm run build`
+### 2. Backend Setup(flask)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+##Install Python dependencies
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```bash
+cd backend
+python3 -m venv venv
+source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+pip install -r requirements.txt
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## 2.2 Set up environment variables
 
-### `npm run eject`
+Create a .env file in the backend directory and add the following variables:
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+env
+Copy code
+FLASK_APP=app.py
+FLASK_ENV=development
+DATABASE_URL=sqlite:///./user.db  # SQLite for local development
+SECRET_KEY=your_secret_key
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+###2.3. Initialize the database
+Run the following commands to initialize and migrate the database:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+```bash
+Copy code
+flask db init
+flask db migrate
+flask db upgrade
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
 
-## Learn More
+###2.4. Run the Flask server
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```bash
+# Copy code
+flask run
+Your Flask server will be running on http://localhost:5000.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+# 3. Frontend Setup (React)
+##3.1. Install React dependencies
+``bash
+Copy code
+cd frontend
+npm install
 
-### Code Splitting
+# 3.2. Run the React development server
+``bash
+Copy code
+npm start
+Your React frontend will be running on http://localhost:3000.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+# 4. Connecting Frontend and Backend
+Ensure both the frontend and backend are running. The frontend (React) will interact with the Flask backend via API calls at http://localhost:5000/api.
 
-### Analyzing the Bundle Size
+You may need to configure the API URLs in your React components to point to the correct backend endpoints.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+# Usage
+Login: Navigate to /login to log in with your credentials.
+Sign Up: Use /signup to create a new account.
+Homepage: After logging in, the homepage will display posts. You can like posts, comment on them, and create new posts.
+Create Post: Go to /post to add a new blog post with a title, content, and an optional image.
+Profile: View and update your profile at /profile.
 
-### Making a Progressive Web App
+# API Endpoints
+Here are the available API endpoints:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+POST /api/posts: Create a new post
+GET /api/posts: Get all posts
+GET /api/posts/{id}: Get a specific post by ID
+PATCH /api/posts/{id}/like: Like a post
+POST /api/posts/{id}/comment: Add a comment to a post
+GET /api/posts/{id}/comments: Get comments for a post
+DELETE /api/posts/{id}: Delete a post
+POST /api/auth/login: Log in a user
+POST /api/auth/signup: Sign up a new user
 
-### Advanced Configuration
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+# Example API Usage
+Create a new post
+```bash
+Copy code
+POST /api/posts
+Content-Type: application/json
+Authorization: Bearer YOUR_JWT_TOKEN
 
-### Deployment
+{
+  "title": "My First Post",
+  "content": "This is the content of the first post",
+  "image_url": "https://example.com/image.jpg",
+  "user_id": 1
+}
+Like a post
+```bash
+Copy code
+PATCH /api/posts/{postId}/like
+Authorization: Bearer YOUR_JWT_TOKEN
+Add a comment to a post
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+```bash
+Copy code
+POST /api/posts/{postId}/comment
+Content-Type: application/json
+Authorization: Bearer YOUR_JWT_TOKEN
 
-### `npm run build` fails to minify
+{
+  "content": "Great post!"
+}
+Contribution
+We welcome contributions to FluxBlog! Here's how you can contribute:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Fork the repository.
+Create a new branch (git checkout -b feature-name).
+Commit your changes (git commit -am 'Add new feature').
+Push to your branch (git push origin feature-name).
+Open a pull request.
+License
+Distributed under the MIT License. See LICENSE for more details.
+
+Happy coding! 😃
+
+```yaml
+Copy code
+
+---
+
+This **coded README** contains all the steps necessary for setting up both the backend and frontend of your **FluxBlog** platform. The API usage section also provides example requests for interacting with the backend. Feel free to adjust or expand as needed!
+
+
+
+
+
+
+
