@@ -10,21 +10,38 @@ class User(db.Model, SerializerMixin):
     password_hash = db.Column(db.String(100), nullable=False)
     posts = db.relationship('Post', backref='author', lazy=True)
 
-class Post(db.Model, SerializerMixin):
+class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    content = db.Column(db.String(500), nullable=False)
+    content = db.Column(db.String(500))
     image_url = db.Column(db.String(200))
-    created_at = db.Column(db.DateTime, default=db.func.now())
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    comments = db.relationship('Comment', backref='post', lazy=True)
-    tags = db.relationship('Tag', secondary='post_tag', lazy='subquery', backref=db.backref('posts', lazy=True))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user = db.relationship('User', back_populates='posts', overlaps='author')
 
-class Comment(db.Model, SerializerMixin):
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'content': self.content,
+            'image_url': self.image_url,
+            'user_id': self.user_id,
+            'username': self.user.username  # assuming 'User' model has a 'username' field
+        }
+
+
+
+class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    content = db.Column(db.String(300), nullable=False)
+    content = db.Column(db.String(255), nullable=False)
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    created_at = db.Column(db.DateTime, default=db.func.now())
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'content': self.content,
+            'user_id': self.user_id,
+            'post_id': self.post_id
+        }
+
 
 class Tag(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)

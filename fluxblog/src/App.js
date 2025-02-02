@@ -1,22 +1,25 @@
 import React from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Homepage from './components/HomePage.js';
-import PostPage from './components/PostPage.js';
-import ProfilePage from './components/ProfilePage.js';
-import LoginPage from './components/LoginPage.js';
-import SignupPage from './components/SignUpPage.js';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import PostPage from './components/PostPage';
+import Homepage from './components/HomePage';  // Ensure correct import
+import LoginPage from './components/LoginPage';  // Ensure correct import
+import SignupPage from './components/SignUpPage';  // Ensure correct import
+import ProfilePage from './components/ProfilePage';  // If you have a ProfilePage
 
 function App() {
   return (
-    <BrowserRouter>
+    <Router>
+      <Navbar /> {/* Navbar appears on all pages */}
       <Routes>
         <Route path="/" element={<Homepage />} />
-        <Route path="/post/:id" element={<PostPage />} />
-        <Route path="/profile/:id" element={<ProfilePage />} />
+        <Route path="/post" element={<PostPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
+        {/* Other routes */}
       </Routes>
-    </BrowserRouter>
+    </Router>
   );
 }
 
