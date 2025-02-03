@@ -100,7 +100,11 @@ function ProfilePage() {
         });
         setUserProfile(response.data);
       } catch (error) {
-        setError('Failed to fetch user profile. Please try again.');
+        if (error.response) {
+          setError(error.response.data.message || 'Failed to fetch user profile.');
+        } else {
+          setError('Network error. Please check your connection.');
+        }
         console.error('Error fetching profile:', error);
       } finally {
         setLoading(false);
