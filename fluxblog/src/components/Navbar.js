@@ -7,7 +7,7 @@ function Navbar() {
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: '15px 30px',
-    background: 'linear-gradient(135deg, #ff7f50, #ff6f61)',  // Gradient background
+    background: 'linear-gradient(135deg, #a8c0ff, #3f87f5)',  // Softer gradient background
     color: 'white',
     boxShadow: '0 2px 10px rgba(0, 0, 0, 0.2)',
     borderRadius: '8px',
@@ -38,8 +38,8 @@ function Navbar() {
   };
 
   const linkHoverStyle = {
-    color: '#ffeb3b',  // Yellow for hover effect
-    transform: 'scale(1.1)', // Slight zoom effect on hover
+    color: '#ffeb3b',  // Soft yellow for hover effect
+    transform: 'scale(1.05)', // Slight zoom effect on hover
   };
 
   return (

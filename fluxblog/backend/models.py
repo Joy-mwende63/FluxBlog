@@ -12,22 +12,22 @@ class User(db.Model, SerializerMixin):
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    content = db.Column(db.String(500))
-    image_url = db.Column(db.String(200))
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    user = db.relationship('User', back_populates='posts', overlaps='author')
+    title = db.Column(db.String(100), nullable=False)
+    content = db.Column(db.String(500), nullable=False)
+    image_url = db.Column(db.String(255))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    likes = db.Column(db.Integer, default=0)
 
     def to_dict(self):
         return {
-            'id': self.id,
-            'content': self.content,
-            'image_url': self.image_url,
-            'user_id': self.user_id,
-            'username': self.user.username  # assuming 'User' model has a 'username' field
+            "id": self.id,
+            "title": self.title,
+            "content": self.content,
+            "image_url": self.image_url,
+            "likes": self.likes,
         }
 
-
-
+    
 class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.String(255), nullable=False)
@@ -41,7 +41,6 @@ class Comment(db.Model):
             'user_id': self.user_id,
             'post_id': self.post_id
         }
-
 
 class Tag(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
